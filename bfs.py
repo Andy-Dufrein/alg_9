@@ -17,16 +17,24 @@ def BFS(graph, s):
     graph.attributes[s]['pi'] = None
     graph.attributes[s]['color'] = 'gray'
     q.append(s)
-
+            
     step = 0
     while len(q) > 0:
         step += 1
         print(step, [graph.attributes[v]['name'] for v in q])
         print(step, [graph.attributes[v]['d'] for v in q])
-        graph.draw('{}'.format(step))
-
-        raise NotImplementedError('Реализуйте алгоритм здесь')
-
+#        print(step, [graph.attributes[v]['pi'] for v in q])
+        graph.draw('{}'.format(step))        
+        v = q.popleft()        
+        
+        for way in graph.adj[v]:
+            if(graph.attributes[way]['color'] == 'white'):
+                q.append(way)
+                graph.attributes[way]['d'] = graph.attributes[v]['d']+1
+                graph.attributes[way]['color'] = 'gray'
+                graph.attributes[way]['pi'] = v
+        graph.attributes[v]['color'] = 'black'        
+    graph.draw('{}'.format(step))
 
 def main():
     g = MyGraph()
@@ -44,6 +52,7 @@ def main():
     g.add_edge(3, 7)
     g.add_edge(5, 6)
     g.add_edge(6, 7)
+    g.draw()
     BFS(g, 1)
 
 
